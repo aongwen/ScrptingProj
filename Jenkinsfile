@@ -9,14 +9,14 @@ pipeline{
 		NEW_VERSION = '1.3.0'
 		SERVER_CREDENTIALS = credentials('server-credentials')
 	}
-	
-	stages("build"){
+	Stages{
+	stage("build"){
 		steps {
 		echo "building the application"
 		}
 	}
 
-	stages("test"){
+	stage("test"){
 		when{
 			expression{
 				BRANCH_NAME == 'dev' || BRANCH_NAME == 'master'
@@ -26,7 +26,7 @@ pipeline{
 		echo "testing the application"
 		}
 	}
-	stages("deploy"){
+	stage("deploy"){
 		steps {
 		echo "deploying the application"
 		withCredentials([
@@ -36,4 +36,5 @@ pipeline{
 		}
 		}
 	}
+   }
 }
