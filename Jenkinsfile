@@ -1,40 +1,29 @@
-pipeline{
-	agent any
-	parameters {
-		string(name: 'VERSION', defaultValue: '', description: 'Version to deploy on prod')
-		choice(name: 'VERSION', choices: ['1.1.0','1.2.0','1.3.0'], description: '')
-		booleanParam(name: 'executeTests', defaultValue: true, description: '')
-	}
-	environment {
-		NEW_VERSION = '1.3.0'
-		SERVER_CREDENTIALS = credentials('server-credentials')
-	}
-	Stages{
-	stage("build"){
-		steps {
-		echo "building the application"
-		}
-	}
+pipeline {
+    agent any
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
 
-	stage("test"){
-		when{
-			expression{
-				BRANCH_NAME == 'dev' || BRANCH_NAME == 'master'
-			}
-		}
-		steps {
-		echo "testing the application"
-		}
-	}
-	stage("deploy"){
-		steps {
-		echo "deploying the application"
-		withCredentials([
-		usernamePassword(credentials: 'server-credentials', usernameVariable: USER, passwordVariable: PWD)
-		]){
-			sh "some script ${USER} ${PWD}"
-		}
-		}
-	}
-   }
+        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+
+        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+
+        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+    }
+    stages {
+        stage('Example') {
+            steps {
+                echo "Hello ${params.PERSON}"
+
+                echo "Biography: ${params.BIOGRAPHY}"
+
+                echo "Toggle: ${params.TOGGLE}"
+
+                echo "Choice: ${params.CHOICE}"
+
+                echo "Password: ${params.PASSWORD}"
+            }
+        }
+    }
 }
